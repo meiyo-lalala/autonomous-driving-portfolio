@@ -1,0 +1,7 @@
+# 多传感器融合定位参数
+fusion_node:
+  ros__parameters:
+    sigma_odom_xy: 0.15      # 里程计平移噪声 std (m)
+    sigma_odom_yaw: 0.0025   # 里程计偏航噪声 std (rad)
+    sigma_gnss_xy: 0.2       # GNSS/RTK 横向噪声 std (m)
+    sigma_gnss_yaw: 0.005    # GNSS/RTK 航向噪声 std (rad)

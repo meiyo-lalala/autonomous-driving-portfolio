@@ -1,0 +1,5 @@
+# 车道线感知参数
+lane_detector_node:
+  ros__parameters:
+    model_path: "output/lane_detector.pt"   # 03 模块训练产物(部署时改绝对路径)
+    conf_thresh: 0.5                        # 二值化阈值
