@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>刘慧琪 · 智能驾驶算法作品集</title>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#1f2430; --sub:#5b6472;
+    --line:#e6e9f0; --brand:#2f6df6; --brand2:#13b18a; --warn:#e08a00;
+    --good:#15935a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding:40px 24px 64px}
+  header.hero{background:linear-gradient(120deg,#1f2a44,#2f6df6);color:#fff;border-radius:18px;
+    padding:34px 34px 30px;box-shadow:0 10px 30px rgba(47,109,246,.18)}
+  header.hero h1{margin:0 0 6px;font-size:30px;letter-spacing:.5px}
+  header.hero p{margin:4px 0;opacity:.92;font-size:15px}
+  .tags{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+  .tag{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+    padding:4px 11px;border-radius:999px;font-size:13px}
+  h2{font-size:22px;margin:42px 0 14px;padding-left:12px;border-left:4px solid var(--brand)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:22px 22px 18px;margin:16px 0;box-shadow:0 4px 14px rgba(31,36,48,.05)}
+  .proj-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .proj-head h3{margin:0;font-size:19px}
+  .pill{font-size:12px;color:var(--brand);border:1px solid var(--brand);border-radius:999px;
+    padding:2px 10px;white-space:nowrap}
+  .metrics{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+  .metric{flex:1 1 150px;background:#f3f6ff;border:1px solid #dde6ff;border-radius:10px;padding:12px 14px}
+  .metric .v{font-size:22px;font-weight:700;color:var(--brand)}
+  .metric .k{font-size:12.5px;color:var(--sub)}
+  .imgs{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px}
+  .imgs figure{margin:0;flex:1 1 320px;background:#0f1422;border-radius:10px;overflow:hidden}
+  .imgs img{width:100%;display:block}
+  .imgs figcaption{color:#cdd6e6;font-size:12.5px;padding:8px 12px;background:#0f1422}
+  ul.feat{margin:10px 0 0;padding-left:18px}
+  ul.feat li{margin:5px 0;font-size:14.5px;color:var(--ink)}
+  table.gap{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+  table.gap th,table.gap td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+  table.gap th{background:#f0f3fa;color:var(--sub);font-weight:600}
+  .ok{color:var(--good);font-weight:600}
+  .todo{color:var(--warn);font-weight:600}
+  .tree{background:#0f1422;color:#d7e2f4;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;overflow:auto}
+  footer{margin-top:40px;color:var(--sub);font-size:13px;text-align:center}
+  a{color:var(--brand)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>刘慧琪 · 智能驾驶算法作品集</h1>
+    <p>三个 <b>从零手搓</b> 的项目——不依赖 mmdet3d / OpenPCDet / Open3D / ROS 框架库，把量产工程经验落到可运行代码。</p>
+    <p>方向：<b>BEV 3D 检测 / 感知</b> + <b>多传感器融合定位（SLAM / 里程计）</b> + <b>退化感知定位</b></p>
+    <div class="tags">
+      <span class="tag">PyTorch 手写</span>
+      <span class="tag">BEV 感知</span>
+      <span class="tag">ICP 配准</span>
+      <span class="tag">EKF 融合</span>
+      <span class="tag">LiDAR+IMU+GNSS</span>
+      <span class="tag">退化检测</span>
+      <span class="tag">Cartographer</span>
+      <span class="tag">可上 GitHub</span>
+    </div>
+  </header>
+
+  <!-- ============ 项目一：SLAM 融合定位 ============ -->
+  <h2>① 多传感器融合定位（SLAM / 里程计）</h2>
+  <div class="card">
+    <div class="proj-head">
+      <h3>手写 ICP + 松耦合 EKF 融合</h3>
+      <span class="pill">纯 NumPy · 零外部框架</span>
+    </div>
+    <p style="color:var(--sub);margin:8px 0 0">
+      把简历里的"L2+ 多传感器融合定位量产装车 >10 万台"落地为最小可运行原型：
+      IMU 死推算 + LiDAR-ICP 里程计 + GNSS，经 EKF 加权融合得到低漂移轨迹，
+      并把多帧点云累积成 BEV 占据地图。
+    </p>
+    <div class="metrics" id="slam-metrics">
+      <!-- 真实运行结果（固定随机种子，可复现） -->
+      <div class="metric"><div class="v" id="m-ekf">1.06</div><div class="k">EKF 融合 ATE (m)</div></div>
+      <div class="metric"><div class="v" id="m-imu">2.94</div><div class="k">IMU-only ATE (m) · 已漂移</div></div>
+      <div class="metric"><div class="v" id="m-icp">1.27</div><div class="k">ICP-only ATE (m)</div></div>
+    </div>
+    <div class="imgs">
+      <figure><img src="slam_fusion/assets/trajectory.png" alt="trajectory"><figcaption>轨迹对比：EKF 融合 vs 真值 / IMU-only / ICP-only 漂移基线</figcaption></figure>
+      <figure><img src="slam_fusion/assets/bev_map.png" alt="bev map"><figcaption>用 EKF 轨迹累积的 BEV 占据地图</figcaption></figure>
+    </div>
+    <ul class="feat">
+      <li><b>手写 ICP</b>：point-to-point 配准，SVD（Horn 法）求解相对位姿，含反射修正</li>
+      <li><b>松耦合 EKF</b>：状态 <code>[x,y,yaw,vx,vy,wy]</code>，IMU 预测 + 位姿更新 + GNSS 更新</li>
+      <li><b>BEV 建图</b>：定位 → 多帧点云累积 → 占据地图的闭环</li>
+      <li><b>数据解耦</b>：换成真实 .pcd / IMU 驱动 / RTK，融合核心不变</li>
+    </ul>
+  </div>
+
+  <!-- ============ 项目二：PyTorch BEV 3D 检测 ============ -->
+  <h2>② PyTorch BEV 3D 目标检测</h2>
+  <div class="card">
+    <div class="proj-head">
+      <h3>anchor-free Center 检测头（手写）</h3>
+      <span class="pill">PyTorch · 无检测框架</span>
+    </div>
+    <p style="color:var(--sub);margin:8px 0 0">
+      补齐简历里的 DL / 检测 / <b>分割</b> / BEV 缺口：点云 → BEV 伪图像 → CNN 主干 →
+      检测头(有无车+3D框) <b>＋ BEV 语义分割头</b>，全程手写，证明"会自己搭检测/分割头"而非只会调包。
+    </p>
+    <div class="metrics" id="bev-metrics">
+      <div class="metric"><div class="v" id="m-rec">96.5%</div><div class="k">Recall (IoU≥0.5)</div></div>
+      <div class="metric"><div class="v" id="m-prec">99.2%</div><div class="k">Precision</div></div>
+      <div class="metric"><div class="v" id="m-loc">0.090 m</div><div class="k">平均定位 L1 (m)</div></div>
+      <div class="metric"><div class="v" id="m-seg">97.4%</div><div class="k">BEV 分割 mIoU</div></div>
+    </div>
+    <div class="imgs">
+      <figure><img src="pytorch_3d_bev/demo_bev.png" alt="bev detection"><figcaption>BEV 三连图：强度图 / 3D 检测(绿=真值,红=预测) / <b>BEV 语义分割</b>(背景/路面/车辆)</figcaption></figure>
+    </div>
+    <ul class="feat">
+      <li><b>BEV 投影</b>：点云栅格化为 max-height / density / intensity 三通道（同 PointPillars / CenterPoint）</li>
+      <li><b>网络</b>：Conv+BN+ReLU 主干，5 个 block + 转置卷积上采样多尺度融合</li>
+      <li><b>多任务头</b>：检测头（分类+回归）<b>＋ BEV 语义分割头（背景/路面/车辆）</b>共享主干，对应简历「分割」缺口</li>
+      <li><b>损失</b>：Focal Loss + 正样本 Smooth-L1 回归 + 加权 CE 分割损失</li>
+      <li><b>接真实数据</b>：替换 <code>SynthDataset</code> 读 KITTI/nuScenes，网络与训练不动</li>
+    </ul>
+  </div>
+
+  <!-- ============ 项目三：退化感知 2D 激光 SLAM ============ -->
+  <h2>③ 地库退化感知 SLAM（Cartographer 对照）</h2>
+  <div class="card">
+    <div class="proj-head">
+      <h3>长通道不可观测性的定量实验</h3>
+      <span class="pill">纯 NumPy + ROS 2 Humble</span>
+    </div>
+    <p style="color:var(--sub);margin:8px 0 0">
+      把"停车场地库能不能只靠激光定位"做成可复现实验：合成地库 / 纯走廊 / 玻璃幕墙三种场景，
+      720 束激光 + 带 2.5% 尺度误差的轮速里程计，逐帧算 Hessian 条件数与退化方向，
+      对比"无处理"与"退化感知"两条管线的 ATE，并用真实 Cartographer 在同份 rosbag2 上做对照。
+    </p>
+    <div class="metrics" id="degen-metrics">
+      <div class="metric"><div class="v">0.908 m</div><div class="k">地库 ATE（里程计 2.72 m）</div></div>
+      <div class="metric"><div class="v">99.8%</div><div class="k">走廊被判退化的帧占比</div></div>
+      <div class="metric"><div class="v">&lt;10°</div><div class="k">退化方向与通道轴误差</div></div>
+      <div class="metric"><div class="v">−73%</div><div class="k">玻璃墙 8 m 量程降幅</div></div>
+    </div>
+    <div class="imgs">
+      <figure><img src="deg_slam_degeneracy/results/figures/fig1_trajectories.png" alt="trajectories"><figcaption>三场景轨迹：真值 / 里程计 / 无退化处理 / 退化感知</figcaption></figure>
+      <figure><img src="deg_slam_degeneracy/results/figures/fig2_condition_number.png" alt="condition number"><figcaption>逐帧条件数：走廊爬到 900，每次转弯断崖回落</figcaption></figure>
+    </div>
+    <ul class="feat">
+      <li><b>两阶段配准</b>：point-to-point 粗配准（Huber 0.25 + 单步限幅）→ 仅用高线性度法向的 point-to-line 精配准，精配准变差则回退</li>
+      <li><b>退化检测</b>：<code>H=JᵀJ</code> 特征分解，条件数 + 退化方向；只对平移 2×2 子块做，否则 yaw 会被一起锚死</li>
+      <li><b>软先验</b>：<code>min ‖r‖² + λ‖Vᵀ(x_odom−x)‖²</code>，Gauss-Newton 消元；失效帧直接回退里程计（fail-safe）</li>
+      <li><b>照实写的负结论</b>：同一策略在走廊 8 m 反而变差 4.79→5.56 m，因为锚定的参考值本身带 2.5% 尺度误差</li>
+      <li><b>Cartographer 对照</b>：无里程计时在平行走廊里连前进都估不出来（地图原地叠影），有里程计才能推进</li>
+    </ul>
+  </div>
+
+  <!-- ============ 与简历呼应 ============ -->
+  <h2>④ 与简历 / 求职的呼应</h2>
+  <div class="card">
+    <table class="gap">
+      <thead><tr><th>简历强项 / 缺口</th><th>作品集对应</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>LiDAR+视觉+差分 GNSS 融合定位（量产 >10 万台）</td><td>① 融合定位项目：LiDAR(ICP)+GNSS，视觉可挂额外支路</td><td class="ok">已落地</td></tr>
+        <tr><td>国家科技进步二等奖（核心成员）</td><td>① 融合定位即获奖方向技术底座</td><td class="ok">已呼应</td></tr>
+        <tr><td>点云特征 / 匹配 / SLAM 前端</td><td>① 手写 ICP 配准</td><td class="ok">已落地</td></tr>
+        <tr><td>缺口：PyTorch / 检测 / 分割 / BEV</td><td>② 手写 BEV 多任务（检测+分割）网络</td><td class="ok">已补齐</td></tr>
+        <tr><td>缺口：现代 DL 框架工程能力</td><td>② 完整训练/评估/推理流水线</td><td class="ok">已补齐</td></tr>
+        <tr><td>缺口：地库 / 封闭场景的退化定位</td><td>③ 退化检测实验 + Cartographer 对照</td><td class="ok">已补齐</td></tr>
+        <tr><td>面试深挖点</td><td>三个项目均可"换真实数据即用"，讲清数据/算法解耦</td><td class="ok">可讲</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============ 仓库结构 ============ -->
+  <h2>⑤ 目录结构</h2>
+  <div class="card">
+    <div class="tree">
+projects/<br>
+├── slam_fusion/        # ① 多传感器融合定位<br>
+│   ├── world.py        # 真值轨迹 + 世界 + 传感器采样<br>
+│   ├── icp.py          # 手写 ICP 配准 (SVD)<br>
+│   ├── fusion_ekf.py   # 松耦合 EKF 融合<br>
+│   ├── bev_map.py      # BEV 占据地图累积<br>
+│   ├── run.py          # 全链路 + 出图<br>
+│   └── README.md<br>
+├── pytorch_3d_bev/     # ② BEV 3D 检测<br>
+│   ├── data/synthetic.py   # 点云→BEV 投影 + 目标<br>
+│   ├── models/bev_detector.py  # 网络 + Focal/SmoothL1 + decode<br>
+│   ├── train.py / evaluate.py / demo.py<br>
+│   └── README.md<br>
+├── deg_slam_degeneracy/    # ③ 地库退化感知 SLAM<br>
+│   ├── src/run_sim_experiment.py   # 三场景 × 两量程 × 三管线<br>
+│   ├── src/degslam/scan_matcher.py # 两阶段配准 + 滑窗地图<br>
+│   ├── src/degslam/fusion.py       # 退化软先验<br>
+│   ├── config/degslam_2d.lua       # Cartographer 2D 配置<br>
+│   ├── scripts/run_cartographer.sh # offline 建图（gflags）<br>
+│   └── results/report.md           # 完整实验报告 + 踩坑复盘<br>
+└── portfolio/          # 本展示页<br>
+    ├── index.html<br>
+    └── README.md
+    </div>
+  </div>
+
+  <footer>
+    本作品集为求职准备 · 全部代码手写实现 · 可直接托管至 GitHub 作为算法能力佐证
+  </footer>
+</div>
+</body>
+</html>
