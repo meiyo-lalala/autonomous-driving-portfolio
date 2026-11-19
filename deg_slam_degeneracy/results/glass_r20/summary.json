@@ -1,0 +1,40 @@
+{
+  "scenario": "glass",
+  "trajectory_length_m": 103.95550652305667,
+  "frames": 500,
+  "summary": [
+    {
+      "mode": "odom_only",
+      "ate_aligned": 2.715574094928541,
+      "ate_unaligned": 4.718263539193125,
+      "ate_max": 6.5703210354719905,
+      "rpe_trans": 0.028564969892312154,
+      "rpe_rot_deg": 0.2804208416187317,
+      "degenerate_fraction": 0.0,
+      "triggered_frames": 0,
+      "median_degenerate_dir": NaN
+    },
+    {
+      "mode": "naive",
+      "ate_aligned": 16.81012587900772,
+      "ate_unaligned": 26.414618964207428,
+      "ate_max": 40.67260583572132,
+      "rpe_trans": 0.23147032735223003,
+      "rpe_rot_deg": 4.533168365877782,
+      "degenerate_fraction": 1.0,
+      "triggered_frames": 0,
+      "median_degenerate_dir": 95.96927510524921
+    },
+    {
+      "mode": "deg_aware",
+      "ate_aligned": 16.81012587900772,
+      "ate_unaligned": 26.414618964207428,
+      "ate_max": 40.67260583572132,
+      "rpe_trans": 0.23147032735223003,
+      "rpe_rot_deg": 4.533168365877782,
+      "degenerate_fraction": 1.0,
+      "triggered_frames": 0,
+      "median_degenerate_dir": 95.96927510524921
+    }
+  ]
+}

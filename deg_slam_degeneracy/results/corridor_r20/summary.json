@@ -1,0 +1,40 @@
+{
+  "scenario": "corridor",
+  "trajectory_length_m": 103.95550652305667,
+  "frames": 500,
+  "summary": [
+    {
+      "mode": "odom_only",
+      "ate_aligned": 2.715574094928541,
+      "ate_unaligned": 4.718263539193125,
+      "ate_max": 6.5703210354719905,
+      "rpe_trans": 0.028564969892312154,
+      "rpe_rot_deg": 0.2804208416187317,
+      "degenerate_fraction": 0.0,
+      "triggered_frames": 0,
+      "median_degenerate_dir": NaN
+    },
+    {
+      "mode": "naive",
+      "ate_aligned": 1.3335395355415012,
+      "ate_unaligned": 1.691898918508632,
+      "ate_max": 2.9501302579008843,
+      "rpe_trans": 0.06899723365844074,
+      "rpe_rot_deg": 0.6409260121324504,
+      "degenerate_fraction": 0.9979959919839679,
+      "triggered_frames": 0,
+      "median_degenerate_dir": 2.9434246589118556
+    },
+    {
+      "mode": "deg_aware",
+      "ate_aligned": 1.3335395355415012,
+      "ate_unaligned": 1.691898918508632,
+      "ate_max": 2.9501302579008843,
+      "rpe_trans": 0.06899723365844074,
+      "rpe_rot_deg": 0.6409260121324504,
+      "degenerate_fraction": 0.9979959919839679,
+      "triggered_frames": 0,
+      "median_degenerate_dir": 2.9434246589118556
+    }
+  ]
+}

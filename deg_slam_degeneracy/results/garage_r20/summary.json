@@ -1,0 +1,40 @@
+{
+  "scenario": "garage",
+  "trajectory_length_m": 103.95550652305667,
+  "frames": 500,
+  "summary": [
+    {
+      "mode": "odom_only",
+      "ate_aligned": 2.715574094928541,
+      "ate_unaligned": 4.718263539193125,
+      "ate_max": 6.5703210354719905,
+      "rpe_trans": 0.028564969892312154,
+      "rpe_rot_deg": 0.2804208416187317,
+      "degenerate_fraction": 0.0,
+      "triggered_frames": 0,
+      "median_degenerate_dir": NaN
+    },
+    {
+      "mode": "naive",
+      "ate_aligned": 0.9078746247854229,
+      "ate_unaligned": 3.422522203849652,
+      "ate_max": 1.9416473813916464,
+      "rpe_trans": 0.029037263111750096,
+      "rpe_rot_deg": 0.7108738435317038,
+      "degenerate_fraction": 0.7414829659318637,
+      "triggered_frames": 0,
+      "median_degenerate_dir": 174.09830028391596
+    },
+    {
+      "mode": "deg_aware",
+      "ate_aligned": 0.9078746247854229,
+      "ate_unaligned": 3.422522203849652,
+      "ate_max": 1.9416473813916464,
+      "rpe_trans": 0.029037263111750096,
+      "rpe_rot_deg": 0.7108738435317038,
+      "degenerate_fraction": 0.7414829659318637,
+      "triggered_frames": 0,
+      "median_degenerate_dir": 174.09830028391596
+    }
+  ]
+}

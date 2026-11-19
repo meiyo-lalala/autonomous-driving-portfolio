@@ -24,12 +24,28 @@ CV/SIFT engineering and the modern AD perception + fusion stack.
 - **Result:** EKF fusion ATE **1.06 m** vs IMU-only 2.94 m / ICP-only 1.27 m
   — sensor fusion clearly beats any single sensor.
 
+### 3. Degeneracy Detection in 2D LiDAR SLAM (from scratch, ROS 2 optional)
+- Synthetic parking-garage / plain-corridor / glass-wall worlds, 720-beam lidar,
+  wheel odometry with a real 2.5% scale error
+- Two-stage scan-to-map front-end: point-to-point coarse (Huber) + point-to-line fine
+  (only high-linearity PCA normals), with fail-safe fallback to odometry
+- Degeneracy detection on the Hessian: condition number + eigen-direction, then a
+  soft prior `min ‖r‖² + λ‖Vᵀ(x_odom−x)‖²` along the weak translation direction only
+- **Results (aligned ATE, 104 m round trip):** garage 0.908 m vs odometry 2.716 m;
+  corridor 99.8% of frames flagged degenerate with direction error < 10°;
+  glass wall + 8 m range **4.754 → 1.292 m (−73%)**, but the same trick makes
+  corridor + 8 m **worse** (4.787 → 5.560 m) because the odometry it anchors to is biased
+- **Cartographer (ROS 2 Humble) cross-check:** without odometry it cannot advance in a
+  parallel corridor at all — the direct evidence that a garage robot needs wheel/IMU odometry
+
 ## Repository structure
 
 | Path | What |
 |------|------|
 | `pytorch_3d_bev/` | BEV detection + segmentation (data / model / train / eval / demo) |
 | `slam_fusion/` | ICP + EKF + BEV mapping (NumPy) |
+| `deg_slam_degeneracy/` | Degeneracy-aware 2D lidar SLAM: synthetic worlds, scan matcher, experiments, Cartographer repro |
+| `nav2_navigation_demo/` | Nav2 navigation demo + benchmark |
 | `portfolio/` | Showcase page (`index.html`) with live metrics |
 | `上传GitHub.md` | Chinese step-by-step GitHub upload guide |
 
@@ -46,6 +62,12 @@ python demo.py --ckpt checkpoints/seg.pt --out demo_bev.png
 # SLAM fusion localization
 cd slam_fusion
 python run.py
+
+# Degeneracy experiments (no ROS needed)
+cd deg_slam_degeneracy
+pip install -r requirements.txt
+python src/run_sim_experiment.py --scenario garage --max-range 20 --laps 1 --out results
+python src/plot_results.py
 ```
 
 ## Why this repo exists

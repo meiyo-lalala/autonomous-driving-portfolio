@@ -1,0 +1,9 @@
+# Keep shell scripts and sources LF so they run unchanged on Linux / ROS 2
+*.sh   text eol=lf
+*.py   text eol=lf
+*.lua  text eol=lf
+*.md   text eol=lf
+*.csv  text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.png  binary

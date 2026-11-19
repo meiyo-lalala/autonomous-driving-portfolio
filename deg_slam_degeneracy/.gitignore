@@ -1,0 +1,27 @@
+# data
+data/bags/
+data/raw/
+data/processed/
+
+# results (keep figures + summary tables, drop large binaries)
+results/**/*.npy
+results/**/*.pbstream
+results/**/*.pgm
+results/**/*.db3
+results/cartographer/*/*.log
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# editors / os
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# marketplace / user data
+results_quick/

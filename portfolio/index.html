@@ -53,14 +53,16 @@
 
   <header class="hero">
     <h1>刘慧琪 · 智能驾驶算法作品集</h1>
-    <p>两个 <b>从零手搓</b> 的项目——不依赖 mmdet3d / OpenPCDet / Open3D / ROS，把量产工程经验落到可运行代码。</p>
-    <p>方向：<b>BEV 3D 检测 / 感知</b> + <b>多传感器融合定位（SLAM / 里程计）</b></p>
+    <p>三个 <b>从零手搓</b> 的项目——不依赖 mmdet3d / OpenPCDet / Open3D / ROS 框架库，把量产工程经验落到可运行代码。</p>
+    <p>方向：<b>BEV 3D 检测 / 感知</b> + <b>多传感器融合定位（SLAM / 里程计）</b> + <b>退化感知定位</b></p>
     <div class="tags">
       <span class="tag">PyTorch 手写</span>
       <span class="tag">BEV 感知</span>
       <span class="tag">ICP 配准</span>
       <span class="tag">EKF 融合</span>
       <span class="tag">LiDAR+IMU+GNSS</span>
+      <span class="tag">退化检测</span>
+      <span class="tag">Cartographer</span>
       <span class="tag">可上 GitHub</span>
     </div>
   </header>
@@ -124,8 +126,39 @@
     </ul>
   </div>
 
+  <!-- ============ 项目三：退化感知 2D 激光 SLAM ============ -->
+  <h2>③ 地库退化感知 SLAM（Cartographer 对照）</h2>
+  <div class="card">
+    <div class="proj-head">
+      <h3>长通道不可观测性的定量实验</h3>
+      <span class="pill">纯 NumPy + ROS 2 Humble</span>
+    </div>
+    <p style="color:var(--sub);margin:8px 0 0">
+      把"停车场地库能不能只靠激光定位"做成可复现实验：合成地库 / 纯走廊 / 玻璃幕墙三种场景，
+      720 束激光 + 带 2.5% 尺度误差的轮速里程计，逐帧算 Hessian 条件数与退化方向，
+      对比"无处理"与"退化感知"两条管线的 ATE，并用真实 Cartographer 在同份 rosbag2 上做对照。
+    </p>
+    <div class="metrics" id="degen-metrics">
+      <div class="metric"><div class="v">0.908 m</div><div class="k">地库 ATE（里程计 2.72 m）</div></div>
+      <div class="metric"><div class="v">99.8%</div><div class="k">走廊被判退化的帧占比</div></div>
+      <div class="metric"><div class="v">&lt;10°</div><div class="k">退化方向与通道轴误差</div></div>
+      <div class="metric"><div class="v">−73%</div><div class="k">玻璃墙 8 m 量程降幅</div></div>
+    </div>
+    <div class="imgs">
+      <figure><img src="../deg_slam_degeneracy/results/figures/fig1_trajectories.png" alt="trajectories"><figcaption>三场景轨迹：真值 / 里程计 / 无退化处理 / 退化感知</figcaption></figure>
+      <figure><img src="../deg_slam_degeneracy/results/figures/fig2_condition_number.png" alt="condition number"><figcaption>逐帧条件数：走廊爬到 900，每次转弯断崖回落</figcaption></figure>
+    </div>
+    <ul class="feat">
+      <li><b>两阶段配准</b>：point-to-point 粗配准（Huber 0.25 + 单步限幅）→ 仅用高线性度法向的 point-to-line 精配准，精配准变差则回退</li>
+      <li><b>退化检测</b>：<code>H=JᵀJ</code> 特征分解，条件数 + 退化方向；只对平移 2×2 子块做，否则 yaw 会被一起锚死</li>
+      <li><b>软先验</b>：<code>min ‖r‖² + λ‖Vᵀ(x_odom−x)‖²</code>，Gauss-Newton 消元；失效帧直接回退里程计（fail-safe）</li>
+      <li><b>照实写的负结论</b>：同一策略在走廊 8 m 反而变差 4.79→5.56 m，因为锚定的参考值本身带 2.5% 尺度误差</li>
+      <li><b>Cartographer 对照</b>：无里程计时在平行走廊里连前进都估不出来（地图原地叠影），有里程计才能推进</li>
+    </ul>
+  </div>
+
   <!-- ============ 与简历呼应 ============ -->
-  <h2>③ 与简历 / 求职的呼应</h2>
+  <h2>④ 与简历 / 求职的呼应</h2>
   <div class="card">
     <table class="gap">
       <thead><tr><th>简历强项 / 缺口</th><th>作品集对应</th><th>状态</th></tr></thead>
@@ -135,13 +168,14 @@
         <tr><td>点云特征 / 匹配 / SLAM 前端</td><td>① 手写 ICP 配准</td><td class="ok">已落地</td></tr>
         <tr><td>缺口：PyTorch / 检测 / 分割 / BEV</td><td>② 手写 BEV 多任务（检测+分割）网络</td><td class="ok">已补齐</td></tr>
         <tr><td>缺口：现代 DL 框架工程能力</td><td>② 完整训练/评估/推理流水线</td><td class="ok">已补齐</td></tr>
-        <tr><td>面试深挖点</td><td>两个项目均可"换真实数据即用"，讲清数据/算法解耦</td><td class="ok">可讲</td></tr>
+        <tr><td>缺口：地库 / 封闭场景的退化定位</td><td>③ 退化检测实验 + Cartographer 对照</td><td class="ok">已补齐</td></tr>
+        <tr><td>面试深挖点</td><td>三个项目均可"换真实数据即用"，讲清数据/算法解耦</td><td class="ok">可讲</td></tr>
       </tbody>
     </table>
   </div>
 
   <!-- ============ 仓库结构 ============ -->
-  <h2>④ 目录结构</h2>
+  <h2>⑤ 目录结构</h2>
   <div class="card">
     <div class="tree">
 projects/<br>
@@ -157,6 +191,13 @@ projects/<br>
 │   ├── models/bev_detector.py  # 网络 + Focal/SmoothL1 + decode<br>
 │   ├── train.py / evaluate.py / demo.py<br>
 │   └── README.md<br>
+├── deg_slam_degeneracy/    # ③ 地库退化感知 SLAM<br>
+│   ├── src/run_sim_experiment.py   # 三场景 × 两量程 × 三管线<br>
+│   ├── src/degslam/scan_matcher.py # 两阶段配准 + 滑窗地图<br>
+│   ├── src/degslam/fusion.py       # 退化软先验<br>
+│   ├── config/degslam_2d.lua       # Cartographer 2D 配置<br>
+│   ├── scripts/run_cartographer.sh # offline 建图（gflags）<br>
+│   └── results/report.md           # 完整实验报告 + 踩坑复盘<br>
 └── portfolio/          # 本展示页<br>
     ├── index.html<br>
     └── README.md
